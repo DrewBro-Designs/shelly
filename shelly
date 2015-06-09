@@ -1,0 +1,23 @@
+#!/bin/bash
+
+. lib/functions.sh
+
+while getopts ":ag:h" opt; do
+  case $opt in
+    h)
+      print_help
+      ;;
+    a)
+      awesome >&2
+      ;;
+    g)
+      greet $OPTARG >&2
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
