@@ -1,23 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env node
 
-. lib/functions.sh
+var program = require('commander');
 
-while getopts ":ag:h" opt; do
-  case $opt in
-    h)
-      print_help
-      ;;
-    a)
-      awesome >&2
-      ;;
-    g)
-      greet $OPTARG >&2
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      ;;
-  esac
-done
+program
+  .version('0.0.1')
+  .option('-g, --greet [name]', 'greets a person of the specified name.')
+  .option('-a, --awesome', 'prints AWESOME!!!!')
+  .parse(process.argv);
+
+if (program.greet) console.log('Hello there %s!', program.greet);
+if (program.awesome) console.log('AWESOME!!!!');
