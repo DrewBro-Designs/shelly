@@ -1,23 +1,51 @@
-#!/bin/bash
+#!/usr/bin/env ruby
+require 'docopt'
 
-. lib/functions.sh
+# ================================
+# Help Menu with Usage and Options
+# ================================
+doc = <<DOCOPT
+Shelly CLI Interface
 
-while getopts ":ag:h" opt; do
-  case $opt in
-    h)
-      print_help
-      ;;
-    a)
-      awesome >&2
-      ;;
-    g)
-      greet $OPTARG >&2
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      ;;
-  esac
-done
+Usage:
+  shelly --help
+  shelly --awesome
+  shelly greet <name>
+
+Options:
+  -h --help      Show help menu.
+  -v --version   Show version.
+  -a --awesome   Print "AWESOME!!!!"
+DOCOPT
+# ================================
+# Set options hash
+# ================================
+begin
+  options = Docopt::docopt(doc, version: '1.0')
+rescue Docopt::Exit => e
+  puts e.message
+end
+
+# ================================
+# Functions
+# ================================
+def greet(name)
+  puts "Hello there, #{name.capitalize}!"
+end
+
+def awesome
+  puts "AWESOME!!!!"
+end
+
+# ================================
+# Option parsing
+# ================================
+if options
+  if options['--help']
+    puts doc
+  elsif options['greet']
+    greet(options['<name>'])
+  elsif options['--awesome']
+    awesome
+  end
+end
